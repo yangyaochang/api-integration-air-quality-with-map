@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap');
+
+body{ 
+    margin:0; 
+    padding:0;
+    font-family: 'Inconsolata', monospace;
+}
+
+#map{ 
+    position:absolute; 
+    top: 0; 
+    bottom:0; 
+    width:100%;
+    padding-left: 360px;
+    z-index: 1;
+}
+
+#canvasContainer{ 
+    position:absolute; 
+    top: 0; 
+    bottom:0; 
+    width:100%;
+    padding-left: 360px;
+    z-index: 2;
+}
+
+.form_container{
+    position: fixed;
+    width: 360px;
+    height: 100vh;
+    padding-top: 40px;
+    background-color:#1f1f1f;
+    z-index: 2;
+}
+
+.form-control{
+    background-color: #131313;
+    border-color: rgba(109, 109, 109, 0.5);
+}
+
+.form-group{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+label{
+    margin-top: 15px;
+    margin-bottom: 5px;;
+    color: #a5a5a5;
+    font-size: 1.2rem;
+}
+
+.list-group{
+    margin-top: 50px;
+}
+
+.list-group-item{
+    background-color: #131313;
+    border-color: rgba(109, 109, 109, 0.5);
+    color: #a5a5a5;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.data{
+    color: white;
+    margin-left: 15px;
+}
+
+.btn-primary{
+    display: block;
+    width: 100%;
+    background-color: #448aff;
+}
+
+.btn_city{
+    margin-top: 32px;
+}
+
+.btn_geo{
+    margin-top: 11px;
+}
+
+.btn-border{
+    height: 11px;
+    border-bottom: 1px solid rgba(109, 109, 109, 0.5);
+}
+
+.option{
+    color: white;
+}
+
+
+
