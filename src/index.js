@@ -1,43 +1,42 @@
-import '../node_modules/bootstrap';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import './main.css';
+import '../node_modules/bootstrap'
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import './main.css'
 
-let mapboxgl = require('../node_modules/mapbox-gl/dist/mapbox-gl.js');
-let $ = (selector) => document.querySelector(selector);
-const APIkey  = '0d7082d4-ec0c-4ed7-8cd7-375b3783dc35';
-let countrySelect, stateSelect, citySelect;
+let mapboxgl = require('../node_modules/mapbox-gl/dist/mapbox-gl.js')
+const APIkey  = '0d7082d4-ec0c-4ed7-8cd7-375b3783dc35'
+let countrySelect, stateSelect, citySelect
 
 let appendData = (data) => {
-    let weather = data.data.current.weather;
-    let pollution = data.data.current.pollution;
+    let weather = data.data.current.weather
+    let pollution = data.data.current.pollution
 
-    $('.timestamp').innerText = weather.ts;
-    $('.temperature').innerText = weather.tp;
-    $('.humidity').innerText = weather.hu;
-    $('.aqi').innerText = pollution.aqius;
+    document.querySelector('.timestamp').innerText = weather.ts
+    document.querySelector('.temperature').innerText = weather.tp
+    document.querySelector('.humidity').innerText = weather.hu
+    document.querySelector('.aqi').innerText = pollution.aqius
     
     switch (pollution.mainus){
         case 'p2':
-            $('.main-pollutant').innerText = 'pm2.5';
+            document.querySelector('.main-pollutant').innerText = 'pm2.5'
             break;
         case 'p1':
-            $('.main-pollutant').innerText = 'pm10';
+            document.querySelector('.main-pollutant').innerText = 'pm10'
             break;
         case 'o3':
-            $('.main-pollutant').innerText = 'Ozone';
+            document.querySelector('.main-pollutant').innerText = 'Ozone'
             break;
         case 'n2':
-            $('.main-pollutant').innerText = 'Nitrogen dioxide';
+            document.querySelector('.main-pollutant').innerText = 'Nitrogen dioxide'
             break;
         case 's2':
-            $('.main-pollutant').innerText = 'Sulfur dioxide';
+            document.querySelector('.main-pollutant').innerText = 'Sulfur dioxide'
             break;
         case 'co':
-            $('.main-pollutant').innerText = 'Carbon monoxide';
+            document.querySelector('.main-pollutant').innerText = 'Carbon monoxide'
             break;
     }
 
-    return data;
+    return data
 }
 
 let relocate = (data) => {
@@ -52,27 +51,16 @@ let relocate = (data) => {
     return data;
 }
 
-let getData = new Promise((resolve, reject) => {
-    $('.btn_geo').addEventListener('click', () => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-    });    
-});
+let getDataByCity = () => {
+    let url = `https://api.airvisual.com/v2/city?city=${citySelect}&state=${stateSelect}&country=${countrySelect}&key=${APIkey}`
 
-getData.then((position) => {
-    let geoLocation = [];
-    geoLocation.push(position.coords.latitude);
-    geoLocation.push(position.coords.longitude);
-    console.log('latitude: ' + geoLocation[0]);
-    console.log('longitude: ' + geoLocation[1]);
-    return geoLocation;
-}).then((geoLocation) => {
-    let url = `https://api.airvisual.com/v2/nearest_city?lat=${geoLocation[0]}&lon=${geoLocation[1]}&key=${APIkey}`;
-
-    return fetch(url, { mode: 'cors'}).then((response) => response.json());
-}).then((dataJSON) => {
-    console.log(dataJSON);
-    return dataJSON;
-}).then(appendData).then(relocate)
+    fetch(url, { mode: 'cors'}).then((response) => response.json())
+    .then((dataJSON) => {
+        console.log(dataJSON);
+        return dataJSON;
+    }).then(appendData)
+    .then(relocate)
+};
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uLXkiLCJhIjoiY2syYzliN2doMGJwbzNtcWs3aW45ZjRzcSJ9.jIai_6O14Ms6DldmvtQgbw';
 var map = new mapboxgl.Map({
@@ -81,8 +69,6 @@ var map = new mapboxgl.Map({
     center: [-77.38, 39],
     zoom: 6
 });
-
-
 
 let onload = new Promise((resolve, reject) => {
     window.addEventListener('load', () => {
@@ -94,13 +80,9 @@ let onload = new Promise((resolve, reject) => {
 onload.then(() => {
     let url = `https://api.airvisual.com/v2/countries?key=${APIkey}`;
 
-    return fetch(url, { mode: 'cors'}).then((response) => response.json());
-}).then((dataJSON) => {
-    console.log(dataJSON);
-    return dataJSON;
+    return fetch(url, {mode: 'cors'}).then((response) => response.json());
 }).then((dataJSON) => {
     let countries = dataJSON.data;
-
     for(let i = 0; i < countries.length; i++){
         let country = document.createElement('option');
         let container = document.querySelector('.dropdown_countries');
@@ -112,21 +94,17 @@ onload.then(() => {
 })
 
 
-let countries = $('.dropdown_countries');
+let countries = document.querySelector('.dropdown_countries');
 
 countries.addEventListener('input', (e) => {
     let country = e.target.value;
     countrySelect = country;
-    console.log(country);
 
     let url = `https://api.airvisual.com/v2/states?country=${countrySelect}&key=${APIkey}`;
-    fetch(url, { mode: 'cors'}).then((response) => response.json())
-    .then((dataJSON) => {
-        console.log(dataJSON);
-        return dataJSON;})
+    fetch(url, {mode: 'cors'}).then((response) => response.json())
     .then((dataJSON) => {
         let states = dataJSON.data;
-        let container = $('.dropdown_states');
+        let container = document.querySelector('.dropdown_states');
         let previous = document.querySelectorAll('.dropdown_states > option').length;
         
         for(let i = 1; i < previous; i++){
@@ -143,21 +121,17 @@ countries.addEventListener('input', (e) => {
     })
 })
 
-let states = $('.dropdown_states');
+let states = document.querySelector('.dropdown_states');
 
 states.addEventListener('input', (e) => {
     let state = e.target.value;
     stateSelect = state;
-    console.log(state);
 
     let url = `https://api.airvisual.com/v2/cities?state=${stateSelect}&country=${countrySelect}&key=${APIkey}`;
-    fetch(url, { mode: 'cors'}).then((response) => response.json())
-    .then((dataJSON) => {
-        console.log(dataJSON);
-        return dataJSON;})
+    fetch(url, {mode: 'cors'}).then((response) => response.json())
     .then((dataJSON) => {
         let cities = dataJSON.data;
-        let container = $('.dropdown_cities');
+        let container = document.querySelector('.dropdown_cities');
         let previous = document.querySelectorAll('.dropdown_cities > option').length;
         
         for(let i = 1; i < previous; i++){
@@ -174,29 +148,19 @@ states.addEventListener('input', (e) => {
     })
 })
 
-let cities = $('.dropdown_cities');
+let cities = document.querySelector('.dropdown_cities');
 
 cities.addEventListener('input', (e) => {
     citySelect = e.target.value;
-    console.log(citySelect);
 })
 
-let btn = $('.btn_city');
+let btn = document.querySelector('.btn_city');
 
 btn.addEventListener('click', () => {
     getDataByCity();
 });
 
-let getDataByCity = () => {
-    let url = `https://api.airvisual.com/v2/city?city=${citySelect}&state=${stateSelect}&country=${countrySelect}&key=${APIkey}`
 
-    fetch(url, { mode: 'cors'}).then((response) => response.json())
-    .then((dataJSON) => {
-        console.log(dataJSON);
-        return dataJSON;
-    }).then(appendData)
-    .then(relocate)
-};
 
 
 
