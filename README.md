@@ -6,6 +6,5 @@ API key will expire on Apr 13 2021
 To view the project, please go to [here](http://eight-comparison.surge.sh/)
 
 
-Integrating an air quality api with a map
 
-http://eight-comparison.surge.sh/
+
