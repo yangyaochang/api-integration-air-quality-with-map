@@ -4,7 +4,7 @@ import './main.css';
 
 let mapboxgl = require('../node_modules/mapbox-gl/dist/mapbox-gl.js');
 let $ = (selector) => document.querySelector(selector);
-const APIkey  = 'BP3iQAPQiYht8cWpR';
+const APIkey  = '0d7082d4-ec0c-4ed7-8cd7-375b3783dc35';
 let countrySelect, stateSelect, citySelect;
 
 let appendData = (data) => {
@@ -68,7 +68,7 @@ getData.then((position) => {
 }).then((geoLocation) => {
     let url = `https://api.airvisual.com/v2/nearest_city?lat=${geoLocation[0]}&lon=${geoLocation[1]}&key=${APIkey}`;
 
-    return fetch(url).then((response) => response.json());
+    return fetch(url, { mode: 'cors'}).then((response) => response.json());
 }).then((dataJSON) => {
     console.log(dataJSON);
     return dataJSON;
@@ -94,7 +94,7 @@ let onload = new Promise((resolve, reject) => {
 onload.then(() => {
     let url = `https://api.airvisual.com/v2/countries?key=${APIkey}`;
 
-    return fetch(url).then((response) => response.json());
+    return fetch(url, { mode: 'cors'}).then((response) => response.json());
 }).then((dataJSON) => {
     console.log(dataJSON);
     return dataJSON;
@@ -103,7 +103,7 @@ onload.then(() => {
 
     for(let i = 0; i < countries.length; i++){
         let country = document.createElement('option');
-        let container = $('.dropdown_countries');
+        let container = document.querySelector('.dropdown_countries');
 
         country.innerText = countries[i].country;
         country.value = countries[i].country;
@@ -120,7 +120,7 @@ countries.addEventListener('input', (e) => {
     console.log(country);
 
     let url = `https://api.airvisual.com/v2/states?country=${countrySelect}&key=${APIkey}`;
-    fetch(url).then((response) => response.json())
+    fetch(url, { mode: 'cors'}).then((response) => response.json())
     .then((dataJSON) => {
         console.log(dataJSON);
         return dataJSON;})
@@ -151,7 +151,7 @@ states.addEventListener('input', (e) => {
     console.log(state);
 
     let url = `https://api.airvisual.com/v2/cities?state=${stateSelect}&country=${countrySelect}&key=${APIkey}`;
-    fetch(url).then((response) => response.json())
+    fetch(url, { mode: 'cors'}).then((response) => response.json())
     .then((dataJSON) => {
         console.log(dataJSON);
         return dataJSON;})
@@ -190,7 +190,7 @@ btn.addEventListener('click', () => {
 let getDataByCity = () => {
     let url = `https://api.airvisual.com/v2/city?city=${citySelect}&state=${stateSelect}&country=${countrySelect}&key=${APIkey}`
 
-    fetch(url).then((response) => response.json())
+    fetch(url, { mode: 'cors'}).then((response) => response.json())
     .then((dataJSON) => {
         console.log(dataJSON);
         return dataJSON;
